@@ -1,33 +1,31 @@
-const root = ReactDOM.createRoot(document.getElementById("root"));
+function BoilingVerdict(props) {
+  if (props.celsius >= 100) {
+    return <p>The water would boil.</p>;
+  }
+  return <p>The water would not boil.</p>;
+}
 
-class Clock extends React.component {
+class Calculator extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { date: new Date() };
+    this.handleChange = this.handleChange.bind(this);
+    this.state = { temperature: "" };
   }
 
-  componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  tick() {
-    this.setState({
-      date: new Date(),
-    });
+  handleChange(e) {
+    this.setState({ temperature: e.target.value });
   }
 
   render() {
+    const temperature = this.state.temperature;
     return (
-      <div>
-        <h1>Hello, world!</h1>
-        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
-      </div>
+      <fieldset>
+        <legend>Enter temperature in Celsius:</legend>
+        <input value={temperature} onChange={this.handleChange} />
+        <BoilingVerdict celsius={parseFloat(temperature)} />
+      </fieldset>
     );
   }
 }
-
-root.render(<Clock />);
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Calculator />);
