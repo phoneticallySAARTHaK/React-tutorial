@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 
 function Square(props) {
-  console.log("val:", props.isDisabled);
   return (
     <button
       className="square"
@@ -16,15 +15,23 @@ function Square(props) {
 }
 
 function Board(props) {
-  const [boardArray, setBoardArray] = useState(Array(9).fill(""));
+  const [boardArray, setBoardArray] = useState(Array(9).fill(null));
   const [isXTurn, setIsXTurn] = useState(true);
-  const [history, setHistory] = useState(Array(9).fill(""));
+  const [history, setHistory] = useState(Array(9).fill(null));
+
+  const winner = calculateWinner(boardArray);
+  let status;
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Current turn: " + (isXTurn ? "X" : "O");
+  }
 
   function renderSquare(i) {
     return (
       <Square
         value={boardArray[i]}
-        isDisabled={boardArray[i] === "" ? false : true}
+        isDisabled={boardArray[i] === null ? false : true}
         onClick={() => {
           setBoardArray((prevState) => {
             let arr = prevState.slice();
@@ -38,7 +45,6 @@ function Board(props) {
     );
   }
 
-  const status = "Current turn: " + (isXTurn ? "X" : "O");
   return (
     <div>
       <div className="status">{status}</div>
@@ -79,3 +85,23 @@ function Game(props) {
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<Game />);
+
+function calculateWinner(squares) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
+}
