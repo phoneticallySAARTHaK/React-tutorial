@@ -103,5 +103,11 @@ function calculateWinner(squares) {
       return squares[a];
     }
   }
-  return null;
+
+  for (const square of squares) {
+    if (square === null) {
+      return null;
+    }
+  }
+  return "No one";
 }
