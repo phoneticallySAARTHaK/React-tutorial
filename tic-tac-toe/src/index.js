@@ -13,6 +13,7 @@ function Square(props) {
 
 function Board(props) {
   const [boardArray, setBoardArray] = useState(Array(9).fill(""));
+  const [isXTurn, setIsXTurn] = useState(true);
   console.log(boardArray);
   function renderSquare(i) {
     return (
@@ -21,7 +22,8 @@ function Board(props) {
         onClick={() =>
           setBoardArray((prevState) => {
             let arr = prevState.slice();
-            arr[i] = "X";
+            arr[i] = isXTurn ? "X" : "O";
+            setIsXTurn((prevState) => (prevState ? false : true));
             return arr;
           })
         }
@@ -29,7 +31,7 @@ function Board(props) {
     );
   }
 
-  const status = "Next player: X";
+  const status = "Current turn: " + (isXTurn ? "X" : "O");
   return (
     <div>
       <div className="status">{status}</div>
