@@ -3,9 +3,13 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 
 function Square(props) {
-  console.log("val:", props.value);
+  console.log("val:", props.isDisabled);
   return (
-    <button className="square" onClick={props.onClick}>
+    <button
+      className="square"
+      onClick={props.onClick}
+      disabled={props.isDisabled}
+    >
       {props.value}
     </button>
   );
@@ -14,19 +18,22 @@ function Square(props) {
 function Board(props) {
   const [boardArray, setBoardArray] = useState(Array(9).fill(""));
   const [isXTurn, setIsXTurn] = useState(true);
-  console.log(boardArray);
+  const [history, setHistory] = useState(Array(9).fill(""));
+
   function renderSquare(i) {
     return (
       <Square
         value={boardArray[i]}
-        onClick={() =>
+        isDisabled={boardArray[i] === "" ? false : true}
+        onClick={() => {
           setBoardArray((prevState) => {
             let arr = prevState.slice();
             arr[i] = isXTurn ? "X" : "O";
-            setIsXTurn((prevState) => (prevState ? false : true));
             return arr;
-          })
-        }
+          });
+
+          setIsXTurn((prevState) => !prevState);
+        }}
       />
     );
   }
